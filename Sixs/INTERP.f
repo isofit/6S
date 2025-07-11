@@ -1,8 +1,8 @@
       subroutine interp (iaer,idatmp,wl,taer55,taer55p,xmud,
      a  romix,rorayl,roaero,phaa,phar,rqmix,rqrayl,rqaero,qhaa,qhar,
-     a  rumix,rurayl,ruaero,uhaa,uhar,
-     a  tsca,tray,trayp,taer,taerp,dtott,utott,astot,asray,asaer,
-     a  utotr,utota,dtotr,dtota,ipol,
+     a  rumix,rurayl,ruaero,uhaa,uhar,tsca,tray,trayp,taer,taerp,
+     a  dtott,ddiftsep,ddirtsep,utott,udiftsep,udirtsep,
+     a  astot,asray,asaer,utotr,utota,dtotr,dtota,ipol,
      a       roatm_fi,romix_fi,rorayl_fi,nfi,
      s   roluts,rolut,rolutsq,rolutq,rolutsu,rolutu,nfilut)
  
@@ -12,11 +12,32 @@
       Real xmud,romix,rorayl,roaero,phaa,phar,tsca,tray
       Real rqmix,rqrayl,rqaero,qhaa,qhar,rqatm,qhase
       Real rumix,rurayl,ruaero,uhaa,uhar,ruatm,uhase
-      Real trayp,taer,taerp,dtott,utott,astot,asray,asaer,utotr
+      Real trayp,taer,taerp
+      Real dtott,utott
+      Real astot,asray,asaer,utotr
       Real utota,dtotr,dtota,ext,ome,gasym,phase,roatm,dtdir
       Real dtdif,utdir,utdif,sphal,wldis,trayl,traypl,delta,sigma
       Real alphaa,betaa,alphar,betar,alphac,betac,coef,coefl,wlinf
       Real drinf,drsup,dtinf,dtsup,dtotc,dainf,dasup,urinf,ursup
+c
+c     Separated variables
+c     Down Diffuse
+      Real ddiftsep
+      Real drdifinf,drdifsup,alphadifr,betadifr,ddifr
+      Real dtdifinf,dtdifsup,alphadifc,betadifc,ddifc
+c     Down Direct
+      Real ddirtsep
+      Real drdirinf,drdirsup,alphadirr,betadirr,ddirr
+      Real dtdirinf,dtdirsup,alphadirc,betadirc,ddirc
+c     Up Diffuse
+      Real udiftsep
+      Real urdifinf,urdifsup,udifr
+      Real utdifinf,utdifsup,udifc
+c     Up Direct 
+      Real udirtsep
+      Real urdirinf,urdirsup,udirr
+      Real utdirinf,utdirsup,udirc
+c
       Real utinf,utsup,utotc,uainf,uasup,arinf,arsup,atinf,atsup
       Real aainf,aasup,depolar1,depolar2
       real romix_fi(nfi),rorayl_fi(nfi),roatm_fi(3,20,nfi)
@@ -338,6 +359,7 @@ c
       taerp=taer55p*betaa*(wl**alphaa)/ext(8)
       taer=taer55*betaa*(wl**alphaa)/ext(8)
 c
+c     Downward total transm
  1235 drinf=dtdif(1,linf)+dtdir(1,linf)
       drsup=dtdif(1,lsup)+dtdir(1,lsup)
       alphar=alog(drsup/drinf)/coef
@@ -355,6 +377,34 @@ c
       betaa=dainf/(wlinf**(alphaa))
       dtota=betaa*(wl**alphaa)
  1236 dtott=dtotc*dtotr
+c
+c     Downward diffuse separation
+      drdifinf=dtdif(1,linf)
+      drdifsup=dtdif(1,lsup)
+      alphadifr=alog(drdifsup/drdifinf)/coef
+      betadifr=drdifinf/(wlinf**(alphadifr))
+      ddifr=betadifr*(wl**alphadifr)
+      dtdifinf=dtdif(2,linf)
+      dtdifsup=dtdif(2,lsup)
+      alphadifc=alog((dtdifsup*drdifinf)/(dtdifinf*drdifsup))/coef
+      betadifc=(dtdifinf/drdifinf)/(wlinf**(alphadifc))
+      ddifc=betadifc*(wl**alphadifc)
+ 1237 ddiftsep=ddifc*ddifr
+c
+c     Downward direct separation
+      drdirinf=dtdir(1,linf)
+      drdirsup=dtdir(1,lsup)
+      alphadirr=alog(drdirsup/drdirinf)/coef
+      betadirr=drdirinf/(wlinf**(alphadirr))
+      ddirr=betadirr*(wl**alphadirr)
+      dtdirinf=dtdir(2,linf)
+      dtdirsup=dtdir(2,lsup)
+      alphadirc=alog((dtdirsup*drdirinf)/(dtdirinf*drdirsup))/coef
+      betadirc=(dtdirinf/drdirinf)/(wlinf**(alphadirc))
+      ddirc=betadirc*(wl**alphadirc)
+ 1238 ddirtsep=ddirc*ddirr
+c
+c     Upward total transm
       urinf=utdif(1,linf)+utdir(1,linf)
       ursup=utdif(1,lsup)+utdir(1,lsup)
       alphar=alog(ursup/urinf)/ coef
@@ -367,11 +417,38 @@ c
       utotc=betac*(wl**alphac)
       uainf=utdif(3,linf)+utdir(3,linf)
       uasup=utdif(3,lsup)+utdir(3,lsup)
-      if(iaer.eq.0) goto 1237
+      if(iaer.eq.0) goto 1239
       alphaa=alog(uasup/uainf)/ coef
       betaa=uainf/(wlinf**(alphaa))
       utota=betaa*(wl**alphaa)
- 1237 utott=utotc*utotr
+ 1239 utott=utotc*utotr
+c
+c     Upward diffuse separation
+      urdifinf=utdif(1,linf)
+      urdifsup=utdif(1,lsup)
+      alphadifr=alog(urdifsup/urdifinf)/coef
+      betadifr=urdifinf/(wlinf**(alphadifr))
+      udifr=betadifr*(wl**alphadifr)
+      utdifinf=utdif(2,linf)
+      utdifsup=utdif(2,lsup)
+      alphadifc=alog((utdifsup*urdifinf)/(utdifinf*urdifsup))/coef
+      betadifc=(utdifinf/urdifinf)/(wlinf**(alphadifc))
+      udifc=betadifc*(wl**alphadifc)
+ 1240 udiftsep=udifc*udifr
+c
+c     Upward direct separation
+      urdirinf=utdir(1,linf)
+      urdirsup=utdir(1,lsup)
+      alphadirr=alog(urdirsup/urdirinf)/coef
+      betadirr=urdirinf/(wlinf**(alphadirr))
+      udirr=betadirr*(wl**alphadirr)
+      utdirinf=utdir(2,linf)
+      utdirsup=utdir(2,lsup)
+      alphadirc=alog((utdirsup*urdirinf)/(utdirinf*urdirsup))/coef
+      betadirc=(utdirinf/urdirinf)/(wlinf**(alphadirc))
+      udirc=betadirc*(wl**alphadirc)
+ 1241 udirtsep=udirc*udirr
+c
       arinf=sphal(1,linf)
       arsup=sphal(1,lsup)
       alphar=alog(arsup/arinf)/ coef
@@ -384,9 +461,9 @@ c
       astot=betac*(wl**alphac)
       aainf=sphal(3,linf)
       aasup=sphal(3,lsup)
-      if(iaer.eq.0) goto 1239
+      if(iaer.eq.0) goto 1241
       alphaa=alog(aasup/aainf)/coef
       betaa=aainf/(wlinf**(alphaa))
       asaer=betaa*(wl**alphaa)
- 1239 return
+ 1242 return
       end

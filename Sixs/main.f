@@ -241,7 +241,9 @@ c***********************************************************************
         real dtniox,dtmeth,dtmoca,utozon,utdica,utoxyg,utniox
         real utmeth,utmoca,attwava,ttozon,ttdica,ttoxyg,ttniox
         real ttmeth,ttmoca,dtwava,utwava,ttwava,coef,romix,rorayl
-        real roaero,phaa,phar,tsca,tray,trayp,taerp,dtott,utott
+        real roaero,phaa,phar,tsca,tray,trayp,taerp
+c       Separated Transmittances
+        real dtott,ddiftsep,ddirtsep,utott,udiftsep,udirtsep
 	real rqmix,rqrayl,rqaero,qhaa,qhar,foqhsr,foqhsa,foqhst
 	real rumix,rurayl,ruaero,uhaa,uhar,rpmix,rpaero,rprayl
 	real srpray,srpaer,srptot,rpmeas1,rpmeas2,rpmeas3
@@ -320,6 +322,11 @@ c***********************************************************************
       
       real uli,eei,thmi,sli,cabi,cwi,vaii,rnci,rsl1i
       real p1,p2,p3,p1p,p2p,p3p
+c***********************************************************************
+c       experimental multi-part to track transmittances 
+c***********************************************************************
+      real dtdira(1501),dtdifa(1501)
+      real utdira(1501),utdifa(1501)
 c***********************************************************************
 c                             return to 6s
 c***********************************************************************
@@ -3043,7 +3050,9 @@ c
         call interp(iaer,idatmp,wl,taer55,taer55p,xmud,romix,
      s   rorayl,roaero,phaa,phar,rqmix,rqrayl,rqaero,qhaa,qhar,
      s   rumix,rurayl,ruaero,uhaa,uhar,
-     s   tsca,tray,trayp,taer,taerp,dtott,utott,astot,asray,asaer,
+     s   tsca,tray,trayp,taer,taerp,
+     s   dtott,ddiftsep,ddirtsep,utott,udiftsep,udirtsep,
+     s   astot,asray,asaer,
      s   utotr,utota,dtotr,dtota,ipol,roatm_fi,romix_fi,rorayl_fi,nfi,
      s   roluts,rolut,rolutsq,rolutq,rolutsu,rolutu,nfilut)
      
@@ -3052,7 +3061,6 @@ c
         ugtot=utwava*utozon*utdica*utoxyg*utniox*utmeth*utmoca
         tgp1=ttozon*ttdica*ttoxyg*ttniox*ttmeth*ttmoca
         tgp2=attwava*ttozon*ttdica*ttoxyg*ttniox*ttmeth*ttmoca
-
 
 CC--- computing integrated values over the spectral band------
         sb=sb+sbor*step
@@ -3119,6 +3127,12 @@ C End Update Look up table
           write(iwr,1501) wl,tgtot,dtott,utott,astot,ratm2,swl,roc,
      s            sbor,dsol,romeas2
         endif
+
+C -- Some experimental multi-part calculations to track 4 component transm 
+        dtdira(l)=ddirtsep*dgtot
+        dtdifa(l)=ddiftsep*dgtot
+        utdira(l)=udirtsep*ugtot
+        utdifa(l)=udiftsep*ugtot
 
 c  ---polarized light:
 c       -the spectral integration without the solar irradiance
@@ -3261,7 +3275,7 @@ C        tmdir=exp(-(tray+taerp)/xmuv)
           ainr(2,j)=ainr(2,j)+anr(2,j)*sbor*step
    56   continue
    51   continue
- 
+
 cc---- integrated values of apparent reflectance, radiance          ---- 
 cc---- and gaseous transmittances (total,downward,separately gases) ----
 
@@ -3391,6 +3405,21 @@ c                                                                      c
 c                       print of final results                         c
 c                                                                      c
 c**********************************************************************c
+
+C Write the experimental multi-part transmittance
+      write(iwr,1402)
+      write(iwr,1401)
+      write(iwr,1506)
+      write(iwr,1504)
+      do ti=iinf,isup
+        wl=.25+(ti-1)*step
+        if (iwave.eq.-2) then
+        write(iwr,1515) wl,dtdira(ti),dtdifa(ti),utdira(ti),utdifa(ti)
+        endif
+      enddo
+      write(iwr,1401)
+      write(iwr,1402)
+ 
 C begining case for a lut output
 C SIMPLE LUT in azimuth
       if (ilut.eq.2) then
@@ -3769,7 +3798,7 @@ c        write(6,*) 'rogbrdf=',rogbrdf,' rodir=',brdfints(mu,1),
 c    s            ' diff=',rogbrdf-brdfints(mu,1)
       endif
       stop
- 
+
 c**********************************************************************c
 c                                                                      c
 c                   output editing formats                             c
@@ -4110,5 +4139,13 @@ c pressure at ground level (174) and altitude (175)
  1501 format(1h*,6(F6.4,1X),F6.1,1X,4(F6.4,1X),t79,1h*)
  1502 format(1h*,6(F5.3,1X),F6.1,1X,1(F6.4,1X),t79,1h*)
  1503 format(1h*,6x,5(F5.3,1X),F6.1,1X,1(F6.4,1X),t79,1h*)
-
+ 1504 format(1h*,1x,4hwave,6x,6hdirect,4x,7hdiffuse,3x,6hdirect,4x,
+     s  7hdiffuse,t79,1h*,/,
+     s  1h*,1x,2hwl,8x,6htransm,4x,6htransm,4x,6htransm,4x,
+     s  6htransm,t79,1h*,/,
+     s  1h*,11x,4hdown,6x,4hdown,6x,2hup,8x,2hup,t79,1h*)
+ 1506 format(1h*,t22,25hMultipart transmittances:,t79,1h*,/,
+     s 1h*,t22,25h-------------------------,t79,1h*,/,
+     s 1h*,t79,1h*)
+ 1515 format(1h*,1x,5(F6.4,4X),t79,1h*)
       end
