@@ -8,11 +8,13 @@ c                                                                      c
 c                                                                      c
 c       ********************************************************       c
 c       *           Second Simulation of a Satellite Signal    *       c
-c       *                 in the Solar Spectrum                *       c
+c       *           in the Solar Spectrum Vectorial            *       c
 c       *           ... (6SV) ....... (6SV) ...... (6SV) ...   *       c
-c       *                      Version  2.0                    *       c
 c       *                                                      *       c
-c       *                      Vector Code                     *       c
+c       *                      Version  2.1                    *       c
+c       *                                                      *       c
+c       *                     November  2017                   *       c
+c       *                                                      *       c
 c       *                                                      *       c
 c       *  This code predicts the satellite signal from 0.25   *       c
 c       *  to 4.0 microns assuming cloudless atmosphere. The   *       c
@@ -45,41 +47,37 @@ c                                                                      c
 c                                                                      c
 c**********************************************************************c
  
- 
- 
- 
- 
- 
- 
 c**********************************************************************c
 c                                                                      c
 c                                                                      c
 c       ********************************************************       c
-c       *             The authors of this code are             *       c
+c       *       The principal authors of this code are         *       c
 c       *                                                      *       c
-c       *            (1) E.F. Vermote and S.Y. Kotchenova;     *       c
-c       *            (2) J.C. Roger;                           *       c
+c       *            (1) E.F. Vermote;                         *       c
+c       *            (2,1) J.C. Roger;                         *       c
 c       *            (3) D. Tanre, J.L. Deuze, M. Herman;      *       c
-c       *            (4) J.J. Morcrette;                       *       c
-c       *            (5) T. Miura.                             *       c
+c       *            (4) J.J. Mocrette.                        *       c
+c       *                                                      *       c
+c       *        Thanks to:                                    *       c
+c       *            T. Miura (5), S. Kotchenova (2),          *       c
+C       *            P. Zelazowski (6)                         *       c
+c       *                                                      *       c
 c       *                                                      *       c
 c       *                   affiliated with                    *       c
 c       *                                                      *       c
-c       *     (1) Department of Geography, University of       *       c
-c       *         Maryland (4321 Hartwick Road, College Park,  *       c
-c       *         MD 20740, USA) and NASA Goddard Space        *       c
-c       *         Flight Center (code 614.5, Greenbelt, MD     *       c
+C       *     (1) NASA Goddard Space                           *       c
+c       *         Flight Center (code 619, Greenbelt, MD     *       c
 c       *         20771, USA)                                  *       c
 c       *                                                      *       c
-c       *     (2) Observatoire de Physique du Globe de         *       c
-c       *         Glermont-Ferrand Universite Blaise Pascal    *       c
-c       *         (24 Avenue des Landais, 63177 Aubiere,       *       c
-c       *         France)                                      *       c
+c       *     (2) Department of Geographical sciences,         *       c
+C       *         University of Maryland                       *       c
+C       *         4321 Hartwick Road,                          *       C
+C       *         College Park, MD 20740, USA                  *       C                
 c       *                                                      *       c
-c       *     (3) Laboratoire d'Optique Atmospherique,         *       c
+c       *     (3) Laboratoire d`Optique Atmospherique,         *       c
 c       *         Universite des Sciences et Techniques de     *       c
 c       *         Lille (u.e.r. de Physique Fondamentale,      *       c
-c       *         59655 Villeneuve d'Ascq Cedex, France)       *       c
+c       *         59655 Villeneuve d`Ascq Cedex, France        *       c
 c       *                                                      *       c
 c       *     (4) European Center for Medium-Range Weather     *       c
 c       *         Forecasts (Shinfield Park, Reading, RG2      *       c
@@ -88,6 +86,11 @@ c       *                                                      *       c
 c       *     (5) University of Hawaii at Manoa                *       c  
 c       *         (1910 East_West Road, Sherman Lab 101        *       c
 c       *         Honolulu, HI 96822)                          *       c
+c       *                                                      *       c
+c       *     (6) Environmental Change Institute,              *       c
+C       *         University of Oxford                         *       c
+C       *         and                                          *       c
+C       *         university of Wavsaw                         *       c
 c       *                                                      *       c
 c       *                                                      *       c
 c       *                                                      *       c
@@ -555,9 +558,9 @@ c                                                                      c
 c                                                                      c
 c   you choose your own conditions; igeom=0                            c
 c         0     enter solar zenith angle   (in degrees )               c
-c                     solar azimuth angle        "                     c
-c                     satellite zenith angle     "                     c
-c                     satellite azimuth angle    "                     c
+c                     solar azimuth angle        ''                    c
+c                     satellite zenith angle     ''                    c
+c                     satellite azimuth angle    ''                    c
 c                     month                                            c
 c                     day of the month                                 c
 c                                                                      c
@@ -768,11 +771,11 @@ c     the following standard aerosol models:                           c
 c                                                                      c
 c  iaer = 0  no aerosols                                               c
 c         1  continental       )                                       c
-c         2  maritime          )  according to d'Almeida's models      c
+c         2  maritime          )  according to d`Almeida`s models      c
 c         3  urban             )  (see the manual)                     c
 c         5  background desert )                                       c
 c         6  biomass burning   )  from AERONET measurements            c
-c         7  stratospheric     )  according to Russel's model          c
+c         7  stratospheric     )  according to Russel`s model          c
 c                                                                      c
 c  or you define your own model using basic components: iaer=4         c
 c         4 enter the volumetric percentage of each component          c
@@ -1108,7 +1111,7 @@ c                                                                      c
 c         0  enter wlinf, wlsup. the filter function will be equal to 1c
 c            over the whole band.                                      c
 c                                                                      c
-c         1  enter wlinf, wlsup and user's filter function s(lambda)   c
+c         1  enter wlinf, wlsup and user`s filter function s(lambda)   c
 c                          ( by step of 0.0025 micrometer).            c
 c                                                                      c
 c                                                                      c
@@ -1119,31 +1122,31 @@ c         2  vis band of meteosat     ( 0.350-1.110 )                  c
 c         3  vis band of goes east    ( 0.490-0.900 )                  c
 c         4  vis band of goes west    ( 0.490-0.900 )                  c
 c         5  1st band of avhrr(noaa6) ( 0.550-0.750 )                  c
-c         6  2nd      "               ( 0.690-1.120 )                  c
+c         6  2nd      ''              ( 0.690-1.120 )                  c
 c         7  1st band of avhrr(noaa7) ( 0.500-0.800 )                  c
-c         8  2nd      "               ( 0.640-1.170 )                  c
+c         8  2nd      ''              ( 0.640-1.170 )                  c
 c         9  1st band of avhrr(noaa8) ( 0.540-1.010 )                  c
-c        10  2nd      "               ( 0.680-1.120 )                  c
+c        10  2nd      ''              ( 0.680-1.120 )                  c
 c        11  1st band of avhrr(noaa9) ( 0.530-0.810 )                  c
-c        12  2nd      "               ( 0.680-1.170 )                  c
+c        12  2nd      ''              ( 0.680-1.170 )                  c
 c        13  1st band of avhrr(noaa10 ( 0.530-0.780 )                  c
-c        14  2nd      "               ( 0.600-1.190 )                  c
+c        14  2nd      ''              ( 0.600-1.190 )                  c
 c        15  1st band of avhrr(noaa11 ( 0.540-0.820 )                  c
-c        16  2nd      "               ( 0.600-1.120 )                  c
+c        16  2nd      ''              ( 0.600-1.120 )                  c
 c        17  1st band of hrv1(spot1)  ( 0.470-0.650 )                  c
-c        18  2nd      "               ( 0.600-0.720 )                  c
-c        19  3rd      "               ( 0.730-0.930 )                  c
-c        20  pan      "               ( 0.470-0.790 )                  c
+c        18  2nd      ''              ( 0.600-0.720 )                  c
+c        19  3rd      ''              ( 0.730-0.930 )                  c
+c        20  pan      ''              ( 0.470-0.790 )                  c
 c        21  1st band of hrv2(spot1)  ( 0.470-0.650 )                  c
-c        22  2nd      "               ( 0.590-0.730 )                  c
-c        23  3rd      "               ( 0.740-0.940 )                  c
-c        24  pan      "               ( 0.470-0.790 )                  c
+c        22  2nd      ''              ( 0.590-0.730 )                  c
+c        23  3rd      ''              ( 0.740-0.940 )                  c
+c        24  pan      ''              ( 0.470-0.790 )                  c
 c        25  1st band of tm(landsat5) ( 0.430-0.560 )                  c
-c        26  2nd      "               ( 0.500-0.650 )                  c
-c        27  3rd      "               ( 0.580-0.740 )                  c
-c        28  4th      "               ( 0.730-0.950 )                  c
-c        29  5th      "               ( 1.5025-1.890 )                 c
-c        30  7th      "               ( 1.950-2.410 )                  c
+c        26  2nd      ''              ( 0.500-0.650 )                  c
+c        27  3rd      ''              ( 0.580-0.740 )                  c
+c        28  4th      ''              ( 0.730-0.950 )                  c
+c        29  5th      ''              ( 1.5025-1.890 )                 c
+c        30  7th      ''              ( 1.950-2.410 )                  c
 c        31  MSS      band 1          (0.475-0.640)                    c
 c        32  MSS      band 2          (0.580-0.750)                    c
 c        33  MSS      band 3          (0.655-0.855)                    c
@@ -1163,9 +1166,9 @@ c        46  MODIS   band 5           ( 1.2150-1.2700)                 c
 c        47  MODIS   band 6           ( 1.6000-1.6650)                 c
 c        48  MODIS   band 7           ( 2.0575-2.1825)                 c
 c        49  1st band of avhrr(noaa12 ( 0.500-1.000 )                  c
-c        50  2nd      "               ( 0.650-1.120 )                  c
+c        50  2nd      ''              ( 0.650-1.120 )                  c
 c        51  1st band of avhrr(noaa14 ( 0.500-1.110 )                  c
-c        52  2nd      "               ( 0.680-1.100 )                  c
+c        52  2nd      ''              ( 0.680-1.100 )                  c
 c        53  POLDER  band 1           ( 0.4125-0.4775)                 c
 c        54  POLDER  band 2 (non polar( 0.4100-0.5225)                 c
 c        55  POLDER  band 3 (non polar( 0.5325-0.5950)                 c
@@ -2139,7 +2142,7 @@ c        write(6,*) "rosur ",rosur
       endif
 c
 c**********************************************************************c
-c     brdf from kuusk's msrm model                                     c
+c     brdf from kuusk`s msrm model                                     c
 c**********************************************************************c
       if(ibrdf.eq.9) then
          read(iread,*) uli,eei,thmi,sli
@@ -2384,6 +2387,15 @@ c       write(6,*) " lddiftt,ludiftt ", lddiftt,ludiftt
      a  /(1.-lsphalbt*albbrdf)
        write(6,*) "a,b,c",coefa,coefb,coefc
        write(6,*) "discri2 ",(coefb*coefb-4*coefa*coefc)
+
+c  ADD by JC to avoid negative discriminant to determine the rhobarbar
+       xtestdiscri=(coefb*coefb-4*coefa*coefc)
+       if (xtestdiscri.lt.0.0)then
+         rbard=albbrdf
+         goto 487
+       endif
+
+
       discri=sqrt(coefb*coefb-4*coefa*coefc)
       rbard=(-coefb+discri)/(2*coefa)
         Write(6,*) "rbard albbrdf 1rst iteration", rbard,albbrdf
@@ -2394,6 +2406,8 @@ c       write(6,*) " lddiftt,ludiftt ", lddiftt,ludiftt
       discri=sqrt(coefb*coefb-4*coefa*coefc)
       rbard=(-coefb+discri)/(2*coefa)
        Write(6,*) "rbard albbrdf 2nd iteration", rbard,albbrdf
+
+ 487   continue
       
       do 335 l=iinf,isup
         rocl(l)=sbrdf(l)
@@ -2578,7 +2592,7 @@ c                     example of input cards                           c
 c                                                                      c
 c 4                            (avhrr observation)                     c
 c 7 6 10.1  600  0.0  10.0     (month,day,htu,cn,longan,han)           c
-c 8                            (user's   model)                        c
+c 8                            (user`s   model)                        c
 c 3.0   0.35                   ( uh2o(g/cm2) ,uo3(cm-atm) )            c
 c 4                            (aerosols model)                        c
 c 0.25  0.25  0.25  0.25       ( % of:dust-like,water-sol,oceanic,soot)c
@@ -3687,12 +3701,23 @@ c      write(6,*) "romixsur,rbarc,rbarpc,rdirc",romixsur,rbarc,rbarpc,rdirc
       coefc=-(romixsur-rbarc-rbarpc-rdirc)
       coefb=lddiftt*ludiftt
       coefa=(lddiftt+lddirtt)*(ludiftt+ludirtt)*lsphalbt/(1.-lsphalbt*rbardest)
+
+c  ADD by JC to avoid negative discriminant to determine the rhobarbar
+           xtestdiscri=(coefb*coefb-4*coefa*coefc)
+           if (xtestdiscri.lt.0.0)then
+            rbard=albbrdf
+            goto 488
+           endif
+
       discri=sqrt(coefb*coefb-4*coefa*coefc)
       rbard=(-coefb+discri)/(2*coefa)
 c        Write(6,*) "rbard albbrdf 1rst iteration", rbard,albbrdf
       coefa=(lddiftt+lddirtt)*(ludiftt+ludirtt)*lsphalbt/(1.-lsphalbt*rbard)
       discri=sqrt(coefb*coefb-4*coefa*coefc)
       rbard=(-coefb+discri)/(2*coefa)
+
+ 488   continue
+
 c       Write(6,*) "rbard albbrdf 2nd iteration", rbard,albbrdf
 	 robarbarstar=rbard/rogbrdf
 	 coefc=(rapp/tgasm-ainr(1,1)/tgasm)
@@ -3840,7 +3865,7 @@ c**********************************************************************c
      s t79,1h*,/,1h*)
      
   146 format(1h*,t79,1h*,/,1h*,
-     s36h  User's input roQ and roU          ,2(F8.3,1X),
+     s36h  User`s input roQ and roU          ,2(F8.3,1X),
      s t79,1h*,/,1h*)
   
   148 format(1h*,22x,21h spectral condition  ,t79,1h*,/,1h*,
@@ -3887,19 +3912,19 @@ c**********************************************************************c
      s        ,t79,1h*,/,
      s       1h*,15x,5(f9.5,1x),t79,1h*)
   190 format(1h*,15x,31h brdf from in-situ measurements,t79,1h*)
-  191 format(1h*,15x,23h Hapke's model selected,t79,1h*
+  191 format(1h*,15x,23h Hapke`s model selected,t79,1h*
      s       /,1h*,16x,3hom:,f5.3,1x,3haf:,f5.3,1x,3hs0:,f5.3,1x,
      s       2hh:,f5.3,t79,1h*)
-  192 format(1h*,15x,38h Pinty and Verstraete's model selected,t79,1h*
+  192 format(1h*,15x,38h Pinty and Verstraete`s model selected,t79,1h*
      s       /,1h*,16x,3hom:,f5.3,1x,5hrad :,f5.3,1x,6hlad  :,f5.3,1x,
      s        t79,1h*)
-  193 format(1h*,15x,32h Roujean et al.'s model selected,t79,1h*
+  193 format(1h*,15x,32h Roujean et al.`s model selected,t79,1h*
      s       /,1h*,16x,3hk0:,f5.3,1x,3hk1:,f5.3,1x,3hk2:,f5.3,
      s       t79,1h*)
-  194 format(1h*,15x,33h Walthall et al.'s model selected,t79,1h*
+  194 format(1h*,15x,33h Walthall et al.`s model selected,t79,1h*
      s       /,1h*,16x,2ha:,f5.3,1x,3hap:,f5.3,1x,2hb:,f5.3,1x,
      s       3hom:,f5.3,t79,1h*)
-  195 format(1h*,15x,26h Minnaert's model selected,t79,1h*
+  195 format(1h*,15x,26h Minnaert`s model selected,t79,1h*
      s       /,1h*,16x,5hpar1:,f5.3,1x,5hpar2:,f5.3,t79,1h*)
   196 format(1h*,15x,21h ocean model selected,t79,1h*
      s       /,1h*,16x,18hwind speed [m/s] :,f5.1,
@@ -3908,9 +3933,9 @@ c**********************************************************************c
      s             4x,23hpigment conc. [mg/m3] :,f6.2,t79,1h*)
   197 format(1h*,15x,41h given kappa1 and kappa2:                ,t79,
      s    1h*,/,1h*,20x,5hkpa1:,f5.3,1x,5hkpa2:,f5.3,t79,1h*)
-  198 format(1h*,15x,41h Goudrian's parametrization of kappa :   ,t79,
+  198 format(1h*,15x,41h Goudrian`s parametrization of kappa :   ,t79,
      s   1h*,/,1h*,20x,6h ksil:,f5.3,1x,t79,1h*)
-  199 format(1h*,15x,41h modified Goudrian's parametrization :   ,t79,
+  199 format(1h*,15x,41h modified Goudrian`s parametrization :   ,t79,
      s   1h*,/,1h*,20x,6h ksil:,f5.3,1x,t79,1h*)
   200 format(1h*,15x,40h single scattering only              :  ,t79,
      s   1h*)
@@ -3918,7 +3943,7 @@ c**********************************************************************c
      s   1h*)
   202 format(1h*,15x,40h isotropic phase function            :  ,t79,
      s   1h*)
-  203 format(1h*,15x,40h Heyney-Greenstein's phase function  :  ,t79,
+  203 format(1h*,15x,40h Heyney-Greenstein`s phase function  :  ,t79,
      s   1h*,/,1h*,20x,6hassym:,f5.3,1x,t79,1h*)
   204 format(1h*,15x,40h Legendre polynomial phase function  :  ,t79,
      s   1h*,/,1h*,20x,6hbeta1:,f5.3,1x,6hbeta2:,f5.3,t79,1h*)
