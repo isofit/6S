@@ -1,4 +1,4 @@
-        subroutine abstra (idatm,wl,xmus,xmuv,uw,uo3,uwus,uo3us,
+        subroutine abstra (idatm,wl,xmus,xmuv,uw,uo3,uco2,uwus,uo3us,
      a               idatmp,uwpl,uo3pl,uwusp,uo3usp,
      a      dtwava,dtozon,dtdica,dtoxyg,dtniox,dtmeth,dtmoca,
      a      utwava,utozon,utdica,utoxyg,utniox,utmeth,utmoca,
@@ -38,7 +38,7 @@ c     total    absorption carbon mono ttmoca
      a          a(8),rm(34),r2(34),r3(34),tp(34),rat(10)
       real rmpl(34),r2pl(34),r3pl(34),ratpl(10)
       real cch2o(15)
-      real wl,xmus,xmuv,uw,uo3,uwus,uo3us,uwpl,uo3pl,uwusp,uo3usp
+      real wl,xmus,xmuv,uw,uo3,uco2,uwus,uo3us,uwpl,uo3pl,uwusp,uo3usp
       real accu,ah2o,xh,dtcont,utcont,ttcont
       double precision ptest1,ptest
       real dtoxyg,dtniox,dtmeth,dtmoca,dtwava,dtozon,dtdica
@@ -219,7 +219,7 @@ c     mixing ratio calculation for each gaseous constituents
       phi=exp(a(3)*te+a(4)*te2)
       psi=exp(a(5)*te+a(6)*te2)
       if(idgaz.eq.1) rm(k)=wh(k)/(roair*1000.)
-      if(idgaz.eq.2) rm(k)=3.3e-04*roco2/air
+      if(idgaz.eq.2) rm(k)=uco2*1.0e-06*roco2/air
       if(idgaz.eq.3) rm(k)=0.20947*rmo2/air
       if(idgaz.eq.4) rm(k)=wo(k)/(roair*1000.)
       if(idgaz.eq.5) rm(k)=310.e-09*rmn2o/air
@@ -277,7 +277,7 @@ c     mixing ratio for plane calculation for each gaseous constituents
           phi=exp(a(3)*te+a(4)*te2)
           psi=exp(a(5)*te+a(6)*te2)
           if(idgaz.eq.1) rmpl(k)=whpl(k)/(roair*1000.)
-          if(idgaz.eq.2) rmpl(k)=3.3e-04*roco2/air
+          if(idgaz.eq.2) rmpl(k)=uco2*1.0e-06*roco2/air
           if(idgaz.eq.3) rmpl(k)=0.20947*rmo2/air
           if(idgaz.eq.4) rmpl(k)=wopl(k)/(roair*1000.)
           if(idgaz.eq.5) rmpl(k)=310.e-09*rmn2o/air
