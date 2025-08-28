@@ -1,10 +1,10 @@
 SHELL = /bin/sh
 EXTRA   = -g -ffixed-line-length-132
-EXTRA   = -O -ffixed-line-length-132
-FFLAGS=  $(EXTRA)
+EXTRA   = -O -ffixed-line-length-132 -std=legacy
+FFLAGS=  $(EXTRA) -std=legacy
 CFLAGS = -Ae $(EXTRA)
-#FC      = g95 $(FFLAGS)
-FC      = gfortran $(FFLAGS)
+#FC      = g95 $(FFLAGS) -std=legacy
+FC      = gfortran $(FFLAGS) -std=legacy
 CC      = cc $(CFLAGS)
 
 OBJECTS0 = AATSR.o ABSTRA.o AEROSO.o AKTOOL.o ATMREF.o AVHRR.o BBM.o BDM.o BRDFGRID.o \
