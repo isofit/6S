@@ -11,9 +11,9 @@ c       *           Second Simulation of a Satellite Signal    *       c
 c       *           in the Solar Spectrum Vectorial            *       c
 c       *           ... (6SV) ....... (6SV) ...... (6SV) ...   *       c
 c       *                                                      *       c
-c       *                      Version  2.1                    *       c
+c       *                 Unofficial  Version  2.1.1           *       c
 c       *                                                      *       c
-c       *                     November  2017                   *       c
+c       *                       August  2025                   *       c
 c       *                                                      *       c
 c       *                                                      *       c
 c       *  This code predicts the satellite signal from 0.25   *       c
