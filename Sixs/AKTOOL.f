@@ -1542,7 +1542,7 @@ c
       real albbrdf
       save /count/, /soildata/, /aaa/, /ggg/, /ladak/
 c
-      dimension uu(20), aa(20)
+      dimension uu(48), aa(48)
 c
       dimension u1(10), u2(10), a1(10), a2(10)
       common /count/ jl, jj, lg, jg, lf, nnx, n1, n2, u1, u2, a1, a2

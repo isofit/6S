@@ -11,7 +11,7 @@ c       *           Second Simulation of a Satellite Signal    *       c
 c       *           in the Solar Spectrum Vectorial            *       c
 c       *           ... (6SV) ....... (6SV) ...... (6SV) ...   *       c
 c       *                                                      *       c
-c       *                 Unofficial  Version  2.1.1           *       c
+c       *                 Unofficial  Version  2.1.2           *       c
 c       *                                                      *       c
 c       *                       August  2025                   *       c
 c       *                                                      *       c
@@ -223,7 +223,7 @@ c***********************************************************************
         real sigma,z,p,t,wh,wo,ext,ome,gasym,phase,qhase,roatm,dtdir
         real dtdif,utdir,utdif,sphal,wldis,trayl,traypl,pi,pi2,step
         real asol,phi0,avis,phiv,tu,xlon,xlat,xlonan,hna,dsol,campm
-        real phi,phirad,xmus,xmuv,xmup,xmud,adif,uw,uo3,taer55
+        real phi,phirad,xmus,xmuv,xmup,xmud,adif,uw,uo3,uco2,taer55
         real taer,v,xps,uwus,uo3us,xpp,taer55p,puw,puo3,puwus
         real puo3us,wl,wlmoy,tamoy,tamoyp,pizmoy,pizmoyp,trmoy
         real trmoyp,fr,rad,spalt,sha,sham,uhase
@@ -708,6 +708,7 @@ c                    pressure       (  in mb )                         c
 c                    temperature    (  in k  )                         c
 c                    h2o density    (in  g/m3)                         c
 c                    o3  density    (in  g/m3)                         c
+c                    co2 density    (in  ppm)                          c
 c                                                                      c
 c           for example, altitudes are  from  0 to 25km step of 1km    c
 c                        from 25 to 50km step of 5km                   c
@@ -716,17 +717,19 @@ c                        so you have 34*5 values to input.             c
 c         8    enter water vapor and ozone contents                    c
 c                 uw  (in  g/cm2 )                                     c
 c                 uo3 (in  cm-atm)                                     c
+c                 uco2 (in  ppm)                                       c
 c                 profil is taken from us62                            c
 c                                                                      c
 c**********************************************************************c
       uw=0.
       uo3=0.
+      uco2=0.
 
       read(iread,*) idatm
 
 
       if(idatm.eq.0) go to 5
-      if(idatm.eq.8) read(iread,*) uw,uo3
+      if(idatm.eq.8) read(iread,*) uw,uo3,uco2
       if(idatm.ne.7) go to 6
       do 7 k=1,34
        read(iread,*) z(k),p(k),t(k),wh(k),wo(k)
@@ -2634,7 +2637,7 @@ c ---- geometrical conditions ----
 c --- atmospheric model ----
       write(iwr, 1119)
       if(idatm-7)226,227,228
-  228 write(iwr, 1281)uw,uo3
+  228 write(iwr, 1281)uw,uo3,uco2
       goto 219
   227 write(iwr, 1272)
       do 229 i=1,34
@@ -3013,12 +3016,12 @@ c ---- spectral loop ----
         roe=roel(l)
         wl=.25+(l-1)*step
 c
-        call abstra(idatm,wl,xmus,xmuv,uw/2.,uo3,uwus,uo3us,
+        call abstra(idatm,wl,xmus,xmuv,uw/2.,uo3,uco2,uwus,uo3us,
      a             idatmp,puw/2.,puo3,puwus,puo3us,
      a      dtwava,dtozon,dtdica,dtoxyg,dtniox,dtmeth,dtmoca,
      a      utwava,utozon,utdica,utoxyg,utniox,utmeth,utmoca,
      a      attwava,ttozon,ttdica,ttoxyg,ttniox,ttmeth,ttmoca )
-        call abstra(idatm,wl,xmus,xmuv,uw,uo3,uwus,uo3us,
+        call abstra(idatm,wl,xmus,xmuv,uw,uo3,uco2,uwus,uo3us,
      a             idatmp,puw,puo3,puwus,puo3us,
      a      dtwava,dtozon,dtdica,dtoxyg,dtniox,dtmeth,dtmoca,
      a      utwava,utozon,utdica,utoxyg,utniox,utmeth,utmoca,
@@ -3837,7 +3840,9 @@ c**********************************************************************c
      s     /,1h*,12x,35h user defined water content : uh2o=,f6.3,
      s                  7h g/cm2 ,t79,1h*,
      s     /,1h*,12x,35h user defined ozone content : uo3 =,f6.3,
-     s                  7h cm-atm,t79,1h*)
+     s                  7h cm-atm,t79,1h*,
+     s     /,1h*,12x,35h user defined co2   content : uco2=,f7.1,
+     s                  6h ppm  ,t79,1h*)
 
 
  5550 format(1h*,10x,25h aerosols type identity :,t79,1h*)

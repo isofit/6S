@@ -33,12 +33,12 @@ OBJECTS2= mainlutaero.o
 
 
 sixs: $(OBJECTS0) $(OBJECTS1) $(OBJECTS2)
-	$(FC)  $(OBJECTS1) $(OBJECTS0) -o sixsV2.1  -lm
-	$(FC)  $(OBJECTS2) $(OBJECTS0) -o sixsV2.1-lutaero  -lm
+	$(FC)  $(OBJECTS1) $(OBJECTS0) -o sixsV2.1.2.CO2  -lm
+	$(FC)  $(OBJECTS2) $(OBJECTS0) -o sixsV2.1.2.CO2-lutaero  -lm
  	
 
 clean:
 	rm -f *.o
-	
+	rm -f sixsV2*
 	
 	
